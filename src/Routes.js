@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 import Login from '../src/Pages/Login'
+import Main from '../src/Pages/Main'
 
 const Stack = createStackNavigator();
 
@@ -11,6 +12,7 @@ export default function Routes() {
     return (
       <Stack.Navigator initialRouteName={"Login"} screenOptions={{ headerShown: true, animationEnabled: false }}>
         <Stack.Screen name="Login" component={Login} options={{ title: '', headerShown: false, }} />
+        <Stack.Screen name="Main" component={Main} options={{ title: '', headerShown: false, }} />
       </Stack.Navigator >
     );
   }

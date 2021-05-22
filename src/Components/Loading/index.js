@@ -13,7 +13,7 @@ export default function Loading(props) {
     <>
       { loadingVisible ?
         <View style={styles.container}>
-          <ActivityIndicator size="large" color="#EB9D01" />
+          <ActivityIndicator size="large" color={colors.green} />
           <Text style={styles.text}>{textMensage ?? `Acessando dados ... `}</Text>
         </View>
         :

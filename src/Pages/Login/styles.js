@@ -58,8 +58,6 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     fontSize: sizes.title,
-    fontFamily: 'Montserrat-Regular',
-
   },
   mainButton: {
     backgroundColor: colors.green,

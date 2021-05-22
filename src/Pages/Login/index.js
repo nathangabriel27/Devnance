@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { api } from '../../Services/Api';
-//import Loading from '../../Components/Loading'
+import Loading from '../../Components/Loading'
 import styles from './styles';
 
 
@@ -37,11 +37,7 @@ export default function Login() {
   }
   async function singIn() {
     try {
-      //setLoadingVisible(true)
-      const bodyFormData = {
-        email: email,
-        password: password,
-      };
+      setLoadingVisible(true)
       const requestAPI = await api.post(`api/v1/users/auth/sign_in`, {
         headers: {
           'Content-Type': 'application/json',
@@ -50,10 +46,14 @@ export default function Login() {
         password: password,
       })
       console.log('request DATA', requestAPI.data),
-      console.log('request HEADERS', requestAPI.headers)
+        console.log('request HEADERS', requestAPI.headers)
       if (requestAPI.status === 200) {
-
         setLoadingVisible(false)
+        const data = {
+          name: requestAPI.data.investor.investor_name,
+          email: requestAPI.data.investor.email
+        }
+        return navigation.navigate('Main', data)
 
       }
     }
@@ -74,20 +74,17 @@ export default function Login() {
       onPress={Keyboard.dismiss}
       enabled={Platform.OS === 'ios'}
     >
-
-
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         style={{ flex: 1 }}
       >
         <StatusBar barStyle="dark-content" hidden={true} />
-
+        <Loading loadingVisible={loadingVisible} textMensage={'Validando informações de login'} />
         <ImageBackground
           source={require('../../../assets/background.png')}
           style={{ flex: 1 }}
         >
           <>
-
             <View style={styles.header}>
               <Image
                 source={require('../../../assets/logo.png')}
