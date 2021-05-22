@@ -189,7 +189,7 @@ export default StyleSheet.create({
   },
   tabBodyScroll: {
     //backgroundColor: colors.red,
-    marginBottom: 100,
+    marginBottom: 80,
   }
 
 })

@@ -4,6 +4,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 
 import Login from '../src/Pages/Login'
 import Main from '../src/Pages/Main'
+import ShowDetails from '../src/Pages/ShowDetails'
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,7 @@ export default function Routes() {
       <Stack.Navigator initialRouteName={"Login"} screenOptions={{ headerShown: true, animationEnabled: false }}>
         <Stack.Screen name="Login" component={Login} options={{ title: '', headerShown: false, }} />
         <Stack.Screen name="Main" component={Main} options={{ title: '', headerShown: false, }} />
+        <Stack.Screen name="ShowDetails" component={ShowDetails} options={{ title: '', headerShown: false, }} />
       </Stack.Navigator >
     );
   }

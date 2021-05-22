@@ -97,9 +97,13 @@ export default function Main() {
         />
       </View>
       <View style={styles.tabBody} >
-        <ScrollView style={styles.tabBodyScroll} >
+        <ScrollView
+          style={styles.tabBodyScroll}
+          showsVerticalScrollIndicator={false}
+        >
           {data.map((data, i) => (
             <Card
+              key={i}
               id={data.id}
               enterprise_name={data.enterprise_name}
               photo={data.photo}
@@ -110,17 +114,17 @@ export default function Main() {
             />
           ))}
         </ScrollView >
-
       </View>
     </View>
   );
   const FindEnterpriceRoute = () => (
     <View style={styles.tabContainer} >
+      <Text style={styles.tasbItemtext} numberOfLines={2}>Pesquise usando nome e tipo da empresa que deseja encontrar</Text>
       <View style={styles.tabHeader} >
         <TextInput
           style={styles.tabHeaderTextInput}
           autoCorrect={false}
-          placeholder="Pesquise por uma empresa"
+          placeholder="Nome da empresa"
           placeholderTextColor='#aaa'
           autoCapitalize="none"
           keyboardType="email-address"
@@ -134,7 +138,7 @@ export default function Main() {
         <TextInput
           style={styles.tabHeaderTextInput}
           autoCorrect={false}
-          placeholder="Pesquise por uma empresa"
+          placeholder="Tipo da empresa"
           placeholderTextColor='#aaa'
           autoCapitalize="none"
           keyboardType="email-address"
@@ -144,6 +148,23 @@ export default function Main() {
         //onSubmitEditing={() => passwordInputRef.current.focus()}
         />
       </View>
+      <ScrollView
+        style={styles.tabBodyScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        {data.map((data, i) => (
+          <Card
+            key={i}
+            id={data.id}
+            enterprise_name={data.enterprise_name}
+            photo={data.photo}
+            description={data.description}
+            city={data.city}
+            country={data.country}
+            share_price={data.share_price}
+          />
+        ))}
+      </ScrollView >
 
     </View>
   );
@@ -178,60 +199,56 @@ export default function Main() {
   };
   return (
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        style={{ flex: 1 }}
-      >
-        <StatusBar barStyle="ligh-content" hidden={false} color={colors.gray} />
-        <Loading loadingVisible={loadingVisible} textMensage={'Buscando dados'} />
-        <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      style={{ flex: 1 }}
+    >
+      <StatusBar barStyle="ligh-content" hidden={true} color={colors.gray} />
+      <Loading loadingVisible={loadingVisible} textMensage={'Buscando dados'} />
+      <View style={styles.container}>
 
-          <View style={styles.header}>
-            <TouchableOpacity
-              style={styles.headerProfile}
-              onPress={() => { }}
-            >
-              <View style={styles.headerCircle}>
-                <Text style={styles.headerCircleText}>TA</Text>
-              </View>
-              <View style={styles.headerTitle}>
-                <Text numberOfLines={1} style={styles.headerText}>Teste Apple</Text>
-                <Text numberOfLines={1} style={styles.headerSubtext}>nathangabriel@gmail.com</Text>
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.headerButton}
-            //onPress={() => logout()}
-            >
-              <View style={styles.headerButtonLogout}              >
-                <MaterialCommunityIcons name="exit-run" size={24} color={colors.green} />
-              </View>
-              <Text style={styles.headerButtonText}>Sair</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.main}>
-            <View style={styles.mainView} />
-            <View style={styles.mainBotton} />
-
-            <View style={styles.mainTabs}>
-              <TabView
-                navigationState={{ index, routes }}
-                renderScene={renderScene}
-                onIndexChange={setIndex}
-                initialLayout={initialLayout}
-                renderTabBar={_renderTabBar}
-                //swipeEnabled={false}
-              />
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.headerProfile}
+            onPress={() => { }}
+          >
+            <View style={styles.headerCircle}>
+              <Text style={styles.headerCircleText}>TA</Text>
             </View>
+            <View style={styles.headerTitle}>
+              <Text numberOfLines={1} style={styles.headerText}>Teste Apple</Text>
+              <Text numberOfLines={1} style={styles.headerSubtext}>nathangabriel@gmail.com</Text>
+            </View>
+          </TouchableOpacity>
 
-          </View>
-
-
+          <TouchableOpacity
+            style={styles.headerButton}
+          //onPress={() => logout()}
+          >
+            <View style={styles.headerButtonLogout}              >
+              <MaterialCommunityIcons name="exit-run" size={24} color={colors.green} />
+            </View>
+            <Text style={styles.headerButtonText}>Sair</Text>
+          </TouchableOpacity>
         </View>
 
-      </KeyboardAvoidingView>
+        <View style={styles.main}>
+          <View style={styles.mainView} />
+          <View style={styles.mainBotton} />
+          <View style={styles.mainTabs}>
+            <TabView
+              navigationState={{ index, routes }}
+              renderScene={renderScene}
+              onIndexChange={setIndex}
+              initialLayout={initialLayout}
+              renderTabBar={_renderTabBar}
+            //swipeEnabled={false}
+            />
+          </View>
+        </View>
+
+      </View>
+    </KeyboardAvoidingView>
 
   );
 }

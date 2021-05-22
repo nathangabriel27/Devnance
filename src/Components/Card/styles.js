@@ -9,7 +9,7 @@ export default StyleSheet.create({
     margin: sizes.small,
     borderRadius: 15,
     flexDirection: 'row',
-    
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -22,27 +22,34 @@ export default StyleSheet.create({
   },
   containerImage: {
     width: 120,
-    height: 110,
+    height: 120,
     borderTopLeftRadius: 15,
     borderBottomLeftRadius: 15,
-    marginRight: sizes.small
+   marginRight: sizes.small,
   },
   body: {
     //backgroundColor: colors.blue,
-    width: '70%',
+    width: '80%',
     justifyContent: 'space-evenly',
-    alignItems: 'center',
+ 
   },
   bodyName: {
     fontSize: sizes.title,
     color: colors.gray,
     fontFamily: 'Montserrat-Bold',
+    width:'90%',
+    textAlign: 'center',
+
+
   },
   bodyDescription: {
-    fontSize: sizes.title,
+    width:'90%',
+    //backgroundColor: colors.redGoogle1,
+    paddingRight: sizes.medium,
+    fontSize: sizes.subTitle,
     color: colors.gray,
     fontFamily: 'Montserrat-Regular',
-    textAlign: 'center',
+    textAlign: 'justify',
   },
   footer: {
     flexDirection: 'row',
