@@ -121,6 +121,7 @@ export default function Login() {
 
   function logout() {
     navigation.navigate('Login')
+    setLoadingVisible(false)
     return dispatch({
       type: REMOVE_USER_DATA,
       payload: userState[0]

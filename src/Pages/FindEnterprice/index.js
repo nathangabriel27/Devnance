@@ -4,6 +4,7 @@ import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { StatusBar } from 'expo-status-bar'
+
 //Componentes
 import { api } from '../../Services/Api';
 import Loading from '../../Components/Loading'

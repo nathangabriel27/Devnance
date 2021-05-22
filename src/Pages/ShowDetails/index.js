@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, View, TouchableOpacityBase } from 'react-native';
+import { Alert, Image, Linking, Keyboard, KeyboardAvoidingView, Platform, Text, Share, ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, View, TouchableOpacityBase } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { StatusBar } from 'expo-status-bar';
+import * as MailComposer from 'expo-mail-composer'
 
 import { data } from '../../Constants/data'
 import iconBase64 from '../../Constants/iconBase64'
@@ -27,12 +28,37 @@ export default function ShowDetails() {
 
   const [numberOfLines, setNumberOfLines] = useState(0)
 
+  function openMail(props) {
+    MailComposer.composeAsync({
+      subject: `Ola estou entrando em contato via email`,
+      recipients: [`${props}`],
+      body: `Olá\n
+      Estou com problemas no meu cadastro.
+      `
+    })
+  }
+  function openNumberPhone(props) {
+    Linking.openURL(props ? `tel:${props}` : `tel:31994827158`)
+  }
+  /*   useEffect(() => {
+      return loadShowDetailsId(route.params);
+    }, [])
+   */
 
-
-/*   useEffect(() => {
-    return loadShowDetailsId(route.params);
-  }, [])
- */
+  const onShare = async () => {
+    const result = await Share.share({
+      message: 'React Native | Compartilhanco com qualquer rede social do dispositivo.',
+    });
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        console.log('result.activityType: ', result.activityType);
+      } else {
+        // shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      console.log('result.action: ', result.action);
+    }
+  };
   useEffect(() => {
     (async () => {
       try {
@@ -109,7 +135,7 @@ export default function ShowDetails() {
                 <View style={styles.mainSocial}>
                   <TouchableOpacity
                     style={styles.mainSocialButton}
-                    onPress={() => { }}
+                    onPress={onShare}
                   >
                     <Image
                       source={{ uri: iconBase64.facebook }}
@@ -119,7 +145,7 @@ export default function ShowDetails() {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.mainSocialButton}
-                    onPress={() => { }}
+                    onPress={() => openMail(data.enterprise.email_enterprise)}
                   >
                     <Image
                       source={{ uri: iconBase64.mail }}
@@ -129,7 +155,7 @@ export default function ShowDetails() {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.mainSocialButton}
-                    onPress={() => { }}
+                    onPress={onShare}
                   >
                     <Image
                       source={{ uri: iconBase64.twitter }}
@@ -139,7 +165,7 @@ export default function ShowDetails() {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.mainSocialButton}
-                    onPress={() => { }}
+                    onPress={() => openNumberPhone(data.phone)}
                   >
                     <Image
                       source={{ uri: iconBase64.phone }}
@@ -149,7 +175,7 @@ export default function ShowDetails() {
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={styles.mainSocialButton}
-                    onPress={() => { }}
+                    onPress={onShare}
                   >
                     <Image
                       source={{ uri: iconBase64.linkedin }}
