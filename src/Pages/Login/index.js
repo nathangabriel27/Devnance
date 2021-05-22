@@ -47,12 +47,6 @@ export default function Login() {
       //return accessToken(userState[0].auth)
     }
   }, [])
-  useEffect(() => {
-    console.log('route', route.params);
-
-  }, [])
-
-
 
   function visibleSecureText() {
     if (secureText === false) {
@@ -102,7 +96,20 @@ export default function Login() {
       }
     }
     catch (err) {
-      console.log('err singIn', err.response.data);
+      console.log('err singIn', err.response.data.errors[0]);
+      if (err.response.data.errors[0] === "Invalid login credentials. Please try again.") {
+        return Alert.alert(
+          'Ooopppsss ',
+          'Parece que sua sessão acabou expirando, Vamos ter que fazer o login novamente para atualizar suas credenciais.',
+          [
+
+            {
+              text: 'Ok, fazer login novamente', onPress: () => logout()
+            },
+          ],
+          { cancelable: false }
+        )
+      }
       const message =
         err.response && err.response.data
           ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
@@ -113,11 +120,11 @@ export default function Login() {
   }
 
   function logout() {
+    navigation.navigate('Login')
     return dispatch({
       type: REMOVE_USER_DATA,
       payload: userState[0]
-    }),
-      navigation.navigate('Login')
+    })
   }
   return (
     <TouchableWithoutFeedback

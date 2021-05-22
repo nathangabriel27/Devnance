@@ -21,7 +21,7 @@ export default function Main() {
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [enterprices, setEnterprices] = useState([])
   const [dataFind, setDataFind] = useState([])
-  const [enterprise_types, setEnterprise_types] = useState('6')
+  const [enterprise_types, setEnterprise_types] = useState('')
   const [name, setName] = useState('')
   const [scroolContainerText, setScroolContainerText] = useState('Pesquise usando nome e tipo da empresa que deseja encontrar. *O campo tipo é obrigatorio.\n\nExemplo:\n   \nNome = Veuno Ltd \nTipo = 2 \n\nCaso informe apenas tipo será exibido mais de uma empresa se tiver, se passar nome e tipo possivelmente retorná apenas um dado.')
 
@@ -76,15 +76,13 @@ export default function Main() {
           'uid': userState[0].auth.uid,
         },
       })
-
       setLoadingVisible(false)
+      if (requestAPI.data.enterprises.length === 0) {
+        return setScroolContainerText(`Desculpe! Infelizmente não pude te ajudar, não consegui encontrar nenhuma empresa com os dados que você me passou. Espero da próxima vez que eu seja mais eficiente para você.\n\nPor favor tente outros dados como por exemplo \nTipo: 2 .`),
+          setDataFind([])
+
+      }
       setDataFind(requestAPI.data.enterprises)
-      console.log('response', dataFind.length);
-
-
-      /*  if (requestAPI.status === 200) {
- 
-       } */
     }
     catch (err) {
       console.log('Erro', err.response.data);
@@ -113,10 +111,10 @@ export default function Main() {
   }
   function logout() {
     navigation.navigate('Login'),
-    dispatch({
-      type: REMOVE_USER_DATA,
-      payload: userState[0]
-    })
+      dispatch({
+        type: REMOVE_USER_DATA,
+        payload: userState[0]
+      })
   }
 
 
@@ -125,7 +123,7 @@ export default function Main() {
     <View style={styles.tabContainer} >
       <View style={styles.tabBody} >
         <ScrollView
-          style={styles.tabBodyScroll}
+          //style={styles.tabBodyScroll}
           showsVerticalScrollIndicator={false}
         >
           {enterprices.map((enterprice, i) => (
@@ -171,7 +169,7 @@ export default function Main() {
             keyboardType="decimal-pad"
             returnKeyType={'search'}
             value={enterprise_types}
-            onChangeText={(text) => console.log(text)}
+            onChangeText={(text) => setEnterprise_types(text)}
           //onSubmitEditing={() => enterpriceIndexWithFilter()}
           />
         </View>
@@ -187,17 +185,26 @@ export default function Main() {
 
       {dataFind.length == 0
         ?
-        <View style={styles.tabBodyScrollContainer}>
-          <Image
-            source={require('../../../assets/logoBackground.png')}
-            resizeMode={'contain'}
-            style={{
-              height: 150,
-              width: 150,
-            }}
-          />
-          <Text style={styles.tabBodyScrollText} >{scroolContainerText}</Text>
-        </View>
+        <>
+          <View style={styles.tabBodyScrollContainer}>
+            <Image
+              source={require('../../../assets/logoBackground.png')}
+              resizeMode={'contain'}
+              style={{
+                height: 150,
+                width: 150,
+              }}
+            />
+            <Text style={styles.tabBodyScrollText} >{scroolContainerText}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.footerButton}
+            onPress={() => navigation.navigate('FindEnterprice')}
+          >
+            <Text style={styles.footerButtonText}>Ir para tela de pesquisa</Text>
+          </TouchableOpacity>
+        </>
+
         :
         <View style={styles.tabBody} >
           <ScrollView
@@ -217,6 +224,7 @@ export default function Main() {
               />
             ))}
           </ScrollView >
+
         </View>
 
 

@@ -235,7 +235,7 @@ export default StyleSheet.create({
   tabBodyScroll: {
     marginBottom: 80,
   },
-  
+
   tabBodyScrollContainer: {
     //backgroundColor: colors.red,
     alignItems: "center",
@@ -250,6 +250,30 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
     marginHorizontal: sizes.small,
     paddingHorizontal: sizes.small,
+  },
+  footerButton: {
+    backgroundColor: colors.white,
+    borderRadius: 15,
+    padding: sizes.medium,
+    margin: sizes.small,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+  },
+  footerButtonText: {
+    height: 30,
+    color: colors.gray,
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: sizes.title,
+    fontFamily: 'Montserrat-Regular',
   },
 
 })
