@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, View, TouchableOpacityBase } from 'react-native';
+import { MaterialCommunityIcons, Ionicons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { StatusBar } from 'expo-status-bar'
@@ -10,7 +10,6 @@ import Loading from '../../Components/Loading'
 import Card from '../../Components/Card'
 import styles from './styles';
 import { colors } from '../../Constants/theme';
-import { data } from '../../Constants/data'
 //Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../Redux/actions/userData';
@@ -21,6 +20,10 @@ export default function Main() {
   const userState = useSelector(state => state.data)
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [enterprices, setEnterprices] = useState([])
+  const [dataFind, setDataFind] = useState([])
+  const [enterprise_types, setEnterprise_types] = useState('6')
+  const [name, setName] = useState('')
+  const [scroolContainerText, setScroolContainerText] = useState('Pesquise usando nome e tipo da empresa que deseja encontrar. *O campo tipo é obrigatorio.\n\nExemplo:\n   \nNome = Veuno Ltd \nTipo = 2 \n\nCaso informe apenas tipo será exibido mais de uma empresa se tiver, se passar nome e tipo possivelmente retorná apenas um dado.')
 
   useEffect(() => {
     (async () => {
@@ -38,20 +41,62 @@ export default function Main() {
           setEnterprices(requestAPI.data.enterprises)
           //console.log('enterpriceIndex', requestAPI.data.enterprises)
           setLoadingVisible(false)
-  
+
         }
       }
       catch (err) {
-        console.log(err);
-        const message =
-          err.response && err.response.data
-            ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
-            : ` Não foi possivel enviar dados para a API. \nErro code: [ ${err} ]`;
-        Alert.alert('Ooopsss', message);
+        console.log('Erro', err.response.status);
+        if (err.response.status === 401) {
+          Alert.alert(
+            'Ooopppsss ',
+            'Parece que sua sessão acabou expirando, Vamos ter que fazer o login novamente.',
+            [
+
+              {
+                text: 'Ok, sair e fazer login', onPress: () => logout()
+              },
+            ],
+            { cancelable: false }
+          )
+        }
         setLoadingVisible(false)
       }
     })();
   }, []);
+
+  async function enterpriceIndexWithFilter(props) {
+    Keyboard.dismiss
+    try {
+      setLoadingVisible(true)
+      const requestAPI = await api.get(`api/v1/enterprises?enterprise_types=${enterprise_types}&name=${name}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'access-token': userState[0].auth.accessToken,
+          'client': userState[0].auth.client,
+          'uid': userState[0].auth.uid,
+        },
+      })
+
+      setLoadingVisible(false)
+      setDataFind(requestAPI.data.enterprises)
+      console.log('response', dataFind.length);
+
+
+      /*  if (requestAPI.status === 200) {
+ 
+       } */
+    }
+    catch (err) {
+      console.log('Erro', err.response.data);
+      const message =
+        err.response && err.response.data
+          ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
+          : ` Não foi possivel enviar dados para a API. \nErro code: [ ${err} ]`;
+      Alert.alert('Ooopsss', message);
+      setLoadingVisible(false)
+    }
+  }
+
 
   function confirmedExit() {
     Alert.alert(
@@ -67,8 +112,8 @@ export default function Main() {
     )
   }
   function logout() {
-    navigation.navigate('Login')
-    return dispatch({
+    navigation.navigate('Login'),
+    dispatch({
       type: REMOVE_USER_DATA,
       payload: userState[0]
     })
@@ -78,20 +123,6 @@ export default function Main() {
 
   const EnterpricesRoute = () => (
     <View style={styles.tabContainer} >
-      <View style={styles.tabHeader} >
-        <TextInput
-          style={styles.tabHeaderTextInput}
-          autoCorrect={false}
-          placeholder="Pesquise por uma empresa"
-          placeholderTextColor='#aaa'
-          autoCapitalize="none"
-          keyboardType="email-address"
-          returnKeyType={'search'}
-        //value={email}
-        //onChangeText={(text) => setEmail(text)}
-        //onSubmitEditing={() => passwordInputRef.current.focus()}
-        />
-      </View>
       <View style={styles.tabBody} >
         <ScrollView
           style={styles.tabBodyScroll}
@@ -115,52 +146,82 @@ export default function Main() {
   );
   const FindEnterpriceRoute = () => (
     <View style={styles.tabContainer} >
-      <Text style={styles.tasbItemtext} numberOfLines={2}>Pesquise usando nome e tipo da empresa que deseja encontrar</Text>
       <View style={styles.tabHeader} >
         <TextInput
           style={styles.tabHeaderTextInput}
           autoCorrect={false}
           placeholder="Nome da empresa"
           placeholderTextColor='#aaa'
-          autoCapitalize="none"
+          autoCapitalize="words"
           keyboardType="email-address"
-          returnKeyType={'search'}
-        //value={email}
-        //onChangeText={(text) => setEmail(text)}
+          returnKeyType={'next'}
+          value={name}
+          onChangeText={(text) => setName(text)}
         //onSubmitEditing={() => passwordInputRef.current.focus()}
         />
       </View>
-      <View style={styles.tabHeader} >
-        <TextInput
-          style={styles.tabHeaderTextInput}
-          autoCorrect={false}
-          placeholder="Tipo da empresa"
-          placeholderTextColor='#aaa'
-          autoCapitalize="none"
-          keyboardType="email-address"
-          returnKeyType={'search'}
-        //value={email}
-        //onChangeText={(text) => setEmail(text)}
-        //onSubmitEditing={() => passwordInputRef.current.focus()}
-        />
-      </View>
-      <ScrollView
-        style={styles.tabBodyScroll}
-        showsVerticalScrollIndicator={false}
-      >
-        {data.map((data, i) => (
-          <Card
-            key={i}
-            id={data.id}
-            enterprise_name={data.enterprise_name}
-            photo={data.photo}
-            description={data.description}
-            city={data.city}
-            country={data.country}
-            share_price={data.share_price}
+      <View style={styles.tabHeaderContainer}>
+        <View style={styles.tabHeaderInput} >
+          <TextInput
+            style={styles.tabHeaderTextInput}
+            autoCorrect={false}
+            placeholder="Tipo da empresa"
+            placeholderTextColor='#aaa'
+            autoCapitalize="none"
+            keyboardType="decimal-pad"
+            returnKeyType={'search'}
+            value={enterprise_types}
+            onChangeText={(text) => console.log(text)}
+          //onSubmitEditing={() => enterpriceIndexWithFilter()}
           />
-        ))}
-      </ScrollView >
+        </View>
+        <TouchableOpacity
+          style={styles.tabHeaderSearchButton}
+          onPress={() => enterpriceIndexWithFilter()}
+        >
+          <Ionicons name="search-circle-sharp" size={40} color={colors.gray} />
+
+        </TouchableOpacity>
+      </View>
+
+
+      {dataFind.length == 0
+        ?
+        <View style={styles.tabBodyScrollContainer}>
+          <Image
+            source={require('../../../assets/logoBackground.png')}
+            resizeMode={'contain'}
+            style={{
+              height: 150,
+              width: 150,
+            }}
+          />
+          <Text style={styles.tabBodyScrollText} >{scroolContainerText}</Text>
+        </View>
+        :
+        <View style={styles.tabBody} >
+          <ScrollView
+            //style={styles.tabBodyScroll}
+            showsVerticalScrollIndicator={false}
+          >
+            {dataFind.map((data, i) => (
+              <Card
+                key={i}
+                id={data.id}
+                enterprise_name={data.enterprise_name}
+                photo={data.photo}
+                description={data.description}
+                city={data.city}
+                country={data.country}
+                share_price={data.share_price}
+              />
+            ))}
+          </ScrollView >
+        </View>
+
+
+      }
+
 
     </View>
   );
@@ -195,10 +256,7 @@ export default function Main() {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      style={{ flex: 1 }}
-    >
+    <>
       <StatusBar barStyle="ligh-content" hidden={true} color={colors.gray} />
       <Loading loadingVisible={loadingVisible} textMensage={'Buscando dados'} />
       <View style={styles.container}>
@@ -243,7 +301,7 @@ export default function Main() {
           </View>
         </View>
       </View>
-    </KeyboardAvoidingView>
+    </>
 
   );
 }

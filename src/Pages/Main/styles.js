@@ -176,20 +176,80 @@ export default StyleSheet.create({
   tabHeaderTextInput: {
     flex: 1,
     height: 30,
-    color: colors.white,
+    color: colors.gray,
     alignItems: "center",
     justifyContent: "center",
     fontSize: sizes.title,
     fontFamily: 'Montserrat-Regular',
   },
   tabBody: {
-    //backgroundColor: colors.red,
     height: '100%',
     marginVertical: sizes.small,
   },
+  tabHeaderContainer: {
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+
+  },
+  tabHeaderInput: {
+    width: '70%',
+    borderRadius: 100,
+    flexDirection: 'row',
+    alignItems: "center",
+    margin: sizes.medium,
+    padding: sizes.medium,
+    backgroundColor: colors.white,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+  },
+
+  tabHeaderSearchButton: {
+    backgroundColor: colors.white,
+    borderRadius: 100,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: sizes.small,
+    marginHorizontal: sizes.medium,
+    paddingVertical: sizes.small,
+    paddingHorizontal: sizes.medium,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+
+  },
   tabBodyScroll: {
-    //backgroundColor: colors.red,
     marginBottom: 80,
-  }
+  },
+  
+  tabBodyScrollContainer: {
+    //backgroundColor: colors.red,
+    alignItems: "center",
+    justifyContent: "center",
+    margin: sizes.small,
+    padding: sizes.small,
+  },
+  tabBodyScrollText: {
+    color: colors.gray,
+    textAlign: 'justify',
+    fontSize: sizes.title,
+    fontFamily: 'Montserrat-Regular',
+    marginHorizontal: sizes.small,
+    paddingHorizontal: sizes.small,
+  },
 
 })
