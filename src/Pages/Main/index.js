@@ -14,18 +14,20 @@ import Card from '../../Components/Card'
 import styles from './styles';
 import { colors, sizes } from '../../Constants/theme';
 
-//import { useSelector, useDispatch } from 'react-redux';
-//import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../redux/actions/userData';
+import { useSelector, useDispatch } from 'react-redux';
+import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../Redux/actions/userData';
 
 export default function Main() {
   const navigation = useNavigation()
   const [loadingVisible, setLoadingVisible] = useState(false)
-  //const state = useSelector(state => state.data)
-  //const dispatch = useDispatch()
+  const userState = useSelector(state => state.data)
+  const dispatch = useDispatch()
+  const [enterprices, setEnterprices] = useState([])
 
 
   useEffect(() => {
-
+    console.log(userState[0].auth);
+    enterpriceIndex()
   }, [])
   function confirmedExit() {
     Alert.alert(
@@ -41,32 +43,28 @@ export default function Main() {
     )
   }
   function logout() {
+    navigation.navigate('Login')
     return dispatch({
       type: REMOVE_USER_DATA,
-      payload: dataToken
-    }),
-      navigation.navigate('Login')
+      payload: userState[0]
+    })
   }
 
-  async function singIn() {
+  async function enterpriceIndex() {
     try {
       setLoadingVisible(true)
-      const requestAPI = await api.post(`api/v1/users/auth/sign_in`, {
+      const requestAPI = await api.get(`api/v1/enterprises`, {
         headers: {
           'Content-Type': 'application/json',
-        },
-        email: email,
-        password: password,
-      })
-      console.log('request DATA', requestAPI.data.investor.investor_name),
-        console.log('request HEADERS', requestAPI.headers)
-      if (requestAPI.status === 200) {
-        setLoadingVisible(false)
-        const data = {
-          name: requestAPI.data.investor.investor_name,
-          email: requestAPI.data.investor.email
+          'access-token': userState[0].auth.accessToken,
+          'client': userState[0].auth.client,
+          'uid': userState[0].auth.uid,
         }
-        return navigation.navigate('Main', data)
+      })
+      if (requestAPI.status === 200) {
+        setEnterprices(requestAPI.data.enterprises)
+        //console.log('enterpriceIndex', requestAPI.data.enterprises)
+        setLoadingVisible(false)
 
       }
     }
@@ -101,16 +99,16 @@ export default function Main() {
           style={styles.tabBodyScroll}
           showsVerticalScrollIndicator={false}
         >
-          {data.map((data, i) => (
+          {enterprices.map((enterprice, i) => (
             <Card
               key={i}
-              id={data.id}
-              enterprise_name={data.enterprise_name}
-              photo={data.photo}
-              description={data.description}
-              city={data.city}
-              country={data.country}
-              share_price={data.share_price}
+              id={enterprice.id}
+              enterprise_name={enterprice.enterprise_name}
+              photo={enterprice.photo}
+              description={enterprice.description}
+              city={enterprice.city}
+              country={enterprice.country}
+              share_price={enterprice.share_price}
             />
           ))}
         </ScrollView >
@@ -216,14 +214,14 @@ export default function Main() {
               <Text style={styles.headerCircleText}>TA</Text>
             </View>
             <View style={styles.headerTitle}>
-              <Text numberOfLines={1} style={styles.headerText}>Teste Apple</Text>
-              <Text numberOfLines={1} style={styles.headerSubtext}>nathangabriel@gmail.com</Text>
+              <Text numberOfLines={1} style={styles.headerText}>{userState[0].investor.investor.investor_name}</Text>
+              <Text numberOfLines={1} style={styles.headerSubtext}>{userState[0].investor.investor.email}</Text>
             </View>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.headerButton}
-          //onPress={() => logout()}
+            onPress={() => confirmedExit()}
           >
             <View style={styles.headerButtonLogout}              >
               <MaterialCommunityIcons name="exit-run" size={24} color={colors.green} />

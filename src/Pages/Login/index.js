@@ -10,21 +10,35 @@ import styles from './styles';
 
 
 
-//import { useSelector, useDispatch } from 'react-redux';
-//import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../redux/actions/userData';
+import { useSelector, useDispatch } from 'react-redux';
+import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../Redux/actions/userData';
 
 export default function Login() {
   const navigation = useNavigation()
   const [loadingVisible, setLoadingVisible] = useState(false)
-  //const state = useSelector(state => state.data)
-  //const dispatch = useDispatch()
+  const userState = useSelector(state => state.data)
+  const dispatch = useDispatch()
   const [secureText, setSecureText] = useState(true)
   const [email, setEmail] = useState('testeapple@ioasys.com.br')
   const [password, setPassword] = useState('12341234')
   const passwordInputRef = useRef();
 
   useEffect(() => {
-
+    setLoadingVisible(false)
+    if (userState.length === 0) {
+      return
+    }
+    if (userState.length != 0) {
+      /* 
+      Se a api trafegasse a senha cryptografada ou um UID de token, nesse momento eu faria login 
+      novamente com usuario e senha salvos no storage ou passaria o token com permissão de acesso do usuario.
+      
+      Irei fazer de uma forma que não é segura, salvando o usuario e senha digitado pelo usuario localm
+      (OBS* Não faço isso nos apps que desenvolvo, irei fazer dessa vez para ter uma melhor experiencia para avaliação.)
+       */
+      console.log('userState[0]', userState);
+      return singIn(userState[0].auth)
+    }
   }, [])
 
 
@@ -35,25 +49,52 @@ export default function Login() {
       setSecureText(false)
     }
   }
-  async function singIn() {
+  async function singIn(props) {
+    //console.log('props', props);
+    Keyboard.dismiss
     try {
       setLoadingVisible(true)
       const requestAPI = await api.post(`api/v1/users/auth/sign_in`, {
         headers: {
           'Content-Type': 'application/json',
         },
-        email: email,
-        password: password,
+        email: props.email,
+        password: props.password,
       })
-      console.log('request DATA', requestAPI.data),
-        console.log('request HEADERS', requestAPI.headers)
+
+      //console.log('request HEADERS', requestAPI.headers)
       if (requestAPI.status === 200) {
-        setLoadingVisible(false)
-        const data = {
-          name: requestAPI.data.investor.investor_name,
-          email: requestAPI.data.investor.email
+        /* 
+         PROBLEMA !!! 
+         A api retorna no header da resposta o access-token 
+         porem o sinal de - é um operador matematico e não 
+         pode ser usado como variavel. Por isso fiz a "gambiarra"
+         não confiavel de converter para array e pegar na posição 4
+         o valor do access-token. 
+
+         A melhor forma de resolver é mudar o nome e tirar esse sinal. 
+        
+        */
+      let accessToken =Object.values(requestAPI.headers)
+
+        const user = {
+          auth: {
+            email: email,
+            password: password,
+            accessToken: accessToken[4],
+            client: requestAPI.headers.client,
+            uid: requestAPI.headers.uid,
+
+          },
+          investor: requestAPI.data
         }
-        return navigation.navigate('Main', data)
+        return dispatch({
+          type: SAVE_USER_DATA,
+          payload: user
+        }),
+          setLoadingVisible(false),
+          navigation.navigate('Main')
+        //console.log('response', userState);
 
       }
     }
@@ -68,7 +109,13 @@ export default function Login() {
     }
   }
 
-
+  function logout() {
+    return dispatch({
+      type: REMOVE_USER_DATA,
+      payload: userState[0]
+    }),
+      navigation.navigate('Login')
+  }
   return (
     <TouchableWithoutFeedback
       onPress={Keyboard.dismiss}
@@ -140,7 +187,8 @@ export default function Login() {
                 </View>
                 <TouchableOpacity
                   style={{ marginHorizontal: 5 }}
-                  onPress={() => visibleSecureText()}
+                  onPress={() => logout()}
+                // onPress={() => visibleSecureText()}
                 >
                   <FontAwesome name={!secureText ? "eye" : "eye-slash"} size={26} color={!secureText ? "#05AB4B" : "#aaa"} />
                 </TouchableOpacity>
@@ -148,7 +196,7 @@ export default function Login() {
               </View>
               <TouchableOpacity
                 style={styles.mainButton}
-                onPress={() => singIn()}
+                onPress={() => singIn({ email: email, password: password })}
               >
                 <Text style={styles.mainButtonText}>Fazer login</Text>
               </TouchableOpacity>
