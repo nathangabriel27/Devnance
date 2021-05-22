@@ -3,7 +3,7 @@ import { FontAwesome, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 //import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
-import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, SafeAreaView,Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { api } from '../../Services/Api';
 import Loading from '../../Components/Loading'
 import styles from './styles';
@@ -25,6 +25,9 @@ export default function Login() {
 
   useEffect(() => {
     setLoadingVisible(false)
+    console.log(userState.length);
+    console.log('userState[0]', userState);
+
     if (userState.length === 0) {
       return
     }
@@ -37,9 +40,12 @@ export default function Login() {
       (OBS* Não faço isso nos apps que desenvolvo, irei fazer dessa vez para ter uma melhor experiencia para avaliação.)
        */
       console.log('userState[0]', userState);
-      return singIn(userState[0].auth)
+      return accessToken(userState[0].auth)
     }
   }, [])
+  function accessToken(props) {
+    return singIn(props)
+  }
 
 
   function visibleSecureText() {
@@ -50,8 +56,7 @@ export default function Login() {
     }
   }
   async function singIn(props) {
-    //console.log('props', props);
-    Keyboard.dismiss
+     Keyboard.dismiss
     try {
       setLoadingVisible(true)
       const requestAPI = await api.post(`api/v1/users/auth/sign_in`, {
@@ -62,26 +67,13 @@ export default function Login() {
         password: props.password,
       })
 
-      //console.log('request HEADERS', requestAPI.headers)
+      //console.log('request HEADERS', requestAPI.headers["access-token"])
       if (requestAPI.status === 200) {
-        /* 
-         PROBLEMA !!! 
-         A api retorna no header da resposta o access-token 
-         porem o sinal de - é um operador matematico e não 
-         pode ser usado como variavel. Por isso fiz a "gambiarra"
-         não confiavel de converter para array e pegar na posição 4
-         o valor do access-token. 
-
-         A melhor forma de resolver é mudar o nome e tirar esse sinal. 
-        
-        */
-      let accessToken =Object.values(requestAPI.headers)
-
         const user = {
           auth: {
             email: email,
             password: password,
-            accessToken: accessToken[4],
+            accessToken: requestAPI.headers["access-token"],
             client: requestAPI.headers.client,
             uid: requestAPI.headers.uid,
 
@@ -94,12 +86,12 @@ export default function Login() {
         }),
           setLoadingVisible(false),
           navigation.navigate('Main')
-        //console.log('response', userState);
+          //console.log('response', userState);
 
       }
     }
     catch (err) {
-      console.log(err);
+      console.log(err.response.data);
       const message =
         err.response && err.response.data
           ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`

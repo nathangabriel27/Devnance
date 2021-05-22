@@ -25,46 +25,47 @@ export default function ShowDetails() {
   const [data, setData] = useState(false)
   const userState = useSelector(state => state.data)
 
-  const [numberOfLines, setNumberOfLines] = useState(3)
+  const [numberOfLines, setNumberOfLines] = useState(0)
 
 
 
-  useEffect(() => {
-    loadShowDetailsId(route.params);
-
+/*   useEffect(() => {
+    return loadShowDetailsId(route.params);
   }, [])
-
-
-  async function loadShowDetailsId(props) {
-    try {
-      setLoadingVisible(true)
-      const requestAPI = await api.get(`api/v1/enterprises/${props}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'access-token': userState[0].auth.accessToken,
-          'client': userState[0].auth.client,
-          'uid': userState[0].auth.uid,
-        },
-      })
-      console.log('request DATA', requestAPI.data)
-      if (requestAPI.data.success === true) {
-        setData(requestAPI.data)
+ */
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoadingVisible(true)
+        const requestAPI = await api.get(`api/v1/enterprises/${route.params}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'access-token': userState[0].auth.accessToken,
+            'client': userState[0].auth.client,
+            'uid': userState[0].auth.uid,
+          },
+        })
+        console.log('request DATA', requestAPI.data)
+        if (requestAPI.data.success === true) {
+          setData(requestAPI.data)
+          setLoadingVisible(false)
+        }
+      }
+      catch (err) {
+        if (err.response.status == 401) {
+          return Alert.alert('Ooopsss', 'sua seção expirou, sera necessario fazer o login novamente. \nErro : 401');
+        }
+        // console.log(err.response.status);
+        const message =
+          err.response && err.response.data
+            ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
+            : ` Não foi possivel enviar dados para a API. \nErro code: [ ${err} ]`;
+        Alert.alert('Ooopsss', err.response.data);
         setLoadingVisible(false)
       }
-    }
-    catch (err) {
-      if (err.response.status == 401) {
-        return Alert.alert('Ooopsss', 'sua seção expirou, sera necessario fazer o login novamente. \nErro : 401');
-      }
-      // console.log(err.response.status);
-      const message =
-        err.response && err.response.data
-          ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
-          : ` Não foi possivel enviar dados para a API. \nErro code: [ ${err} ]`;
-      Alert.alert('Ooopsss', message);
-      setLoadingVisible(false)
-    }
-  }
+    })();
+  }, []);
+
 
   return (
 
@@ -102,6 +103,8 @@ export default function ShowDetails() {
                   <Text style={styles.mainContainerTitle}>{data.enterprise.enterprise_name}</Text>
                   <Text style={styles.mainContainerSubtitle}>{`# ${data.enterprise.id}`}</Text>
                 </View>
+
+
 
                 <View style={styles.mainSocial}>
                   <TouchableOpacity
@@ -156,66 +159,58 @@ export default function ShowDetails() {
                   </TouchableOpacity>
                 </View>
 
-
-                <TouchableOpacity
-                  style={styles.mainDescription}
-                  onPress={() => setNumberOfLines(0)}
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
                 >
-                  <Text numberOfLines={numberOfLines} style={styles.mainDescriptionText}>{data.enterprise.description}</Text>
-                  {
-                    numberOfLines === 3
-                      ?
-                      <Text style={[styles.mainDescriptionText,{fontFamily: 'Montserrat-Bold',}]}>Ler Mais... </Text>
-                      :
-                      <></>
-                  }
-                </TouchableOpacity>
+                  <View style={styles.mainLocationContainer}>
+                    <View style={styles.mainLocationItem}>
 
-                <View style={styles.mainLocationContainer}>
-                  <View style={styles.mainLocationItem}>
+                      <View style={styles.mainLocationIcon}>
+                        <MaterialCommunityIcons name="map-marker-circle" size={34} color={colors.gray} />
+                        <Text style={styles.mainLocationText}>{data.enterprise.city}</Text>
+                      </View>
+                    </View>
 
-                    <View style={styles.mainLocationIcon}>
-                      <MaterialCommunityIcons name="map-marker-circle" size={34} color={colors.gray} />
-                      <Text style={styles.mainLocationText}>{data.enterprise.city}</Text>
+                    <View style={styles.mainLocationItem}>
+                      <View style={styles.mainLocationIcon}>
+                        <MaterialCommunityIcons name="flag" size={34} color={colors.gray} />
+                        <Text style={styles.mainLocationText}>{data.enterprise.country}</Text>
+                      </View>
                     </View>
                   </View>
 
-                  <View style={styles.mainLocationItem}>
-                    <View style={styles.mainLocationIcon}>
-                      <MaterialCommunityIcons name="flag" size={34} color={colors.gray} />
-                      <Text style={styles.mainLocationText}>{data.enterprise.country}</Text>
-                    </View>
-                  </View>
-                </View>
-                <View style={styles.mainBodyPricing}>
+
+
                   <View style={styles.mainBodyPricing}>
-                    <View style={styles.mainBodyPricing}>
-                      <Text style={styles.mainBodyPricingTitle}>Nº de ações </Text>
+
+
+                    <View style={styles.mainBodyPricingContainer}>
+                      <View style={styles.mainBodyPricingText}>
+                        <Text style={styles.mainBodyPricingTitle}>Nº de ações </Text>
+                      </View>
+                      <View style={styles.mainBodyPricingValue}>
+                        <Text style={styles.mainBodyPricingValueTitle}>{data.enterprise.shares}</Text>
+                        <Entypo name="line-graph" size={24} color={colors.gray} />
+                      </View>
                     </View>
-                    <View style={styles.mainBodyPricing}>
-                      <Text style={styles.mainBodyPricingTitle}>{data.enterprise.shares}</Text>
 
-                      <Entypo name="line-graph" size={24} color={colors.gray} />
-
-                    </View>
-
-                  </View>
-                  <View style={styles.mainBodyPricing}>
-                    <View style={styles.mainBodyPricing}>
-                      <Text style={styles.mainBodyPricingTitle}>Valor da ação</Text>
-
-
-                    </View>
-                    <View style={styles.mainBodyPricing}>
-                      <Text style={styles.mainBodyPricingTitle}>{data.enterprise.share_price}</Text>
-
-
-                      <Entypo name="line-graph" size={24} color={colors.gray} />
+                    <View style={styles.mainBodyPricingContainer}>
+                      <View style={styles.mainBodyPricingText}>
+                        <Text style={styles.mainBodyPricingTitle}>Valor da ação</Text>
+                      </View>
+                      <View style={styles.mainBodyPricingValue}>
+                        <Text style={styles.mainBodyPricingValueTitle}>{`$ ${data.enterprise.share_price}`}</Text>
+                        <Entypo name="line-graph" size={24} color={colors.gray} />
+                      </View>
                     </View>
 
                   </View>
+                  <View style={styles.mainDescription}>
+                    <Text style={styles.mainDescriptionText}>{data.enterprise.description}</Text>
+                  </View>
+                </ScrollView>
 
-                </View>
+
               </View>
             </View>
           </View>

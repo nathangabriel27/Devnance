@@ -32,7 +32,7 @@ export default StyleSheet.create({
     borderTopRightRadius: 40,
   },
   mainContainer: {
-    // backgroundColor: colors.green,
+
     width: '100%',
 
   },
@@ -72,7 +72,6 @@ export default StyleSheet.create({
     margin: sizes.small,
   },
   mainSocialButton: {
-    // backgroundColor: colors.blue,
     padding: sizes.large,
     borderRadius: 1000,
   },
@@ -81,7 +80,9 @@ export default StyleSheet.create({
     height: 40,
   },
   mainDescription: {
-    padding: sizes.medium,
+
+    marginBottom: 280,
+    paddingHorizontal: sizes.medium,
   },
   mainDescriptionText: {
     textAlign: 'justify',
@@ -104,7 +105,7 @@ export default StyleSheet.create({
 
   },
   mainLocationIcon: {
-    backgroundColor: colors.blue,
+    //backgroundColor: colors.blue,
     flexDirection: 'row',
     alignItems: "center",
     justifyContent: "center",
@@ -118,10 +119,57 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-Regular',
   },
   mainBodyPricing: {
+    margin: sizes.small,
+    padding: sizes.small,
+    //height: height / 0.3,
+  },
+  mainBodyPricingContainer: {
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    margin: sizes.small,
+    padding: sizes.small,
+  },
+  mainBodyPricingText: {
+    backgroundColor: colors.gray,
+    padding: sizes.medium,
+    width: '60%',
+    borderRadius: 80,
+    height: 60,
+    alignItems: "center",
+    flexDirection: 'row',
 
   },
   mainBodyPricingTitle: {
+    fontSize: sizes.subTitle,
+    color: colors.white,
+    fontFamily: 'Montserrat-Bold',
+  },
+  mainBodyPricingValue: {
+    borderRadius: 80,
+    justifyContent: "space-between",
+    flexDirection: 'row',
+    marginLeft: -60,
+    backgroundColor: colors.white,
+    paddingHorizontal: sizes.large,
+    width: '50%',
+    height: 60,
+    alignItems: "center",
 
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    elevation: 3,
+  },
+  mainBodyPricingValueTitle: {
+    fontSize: sizes.subTitle,
+    color: colors.gray,
+    fontFamily: 'Montserrat-Regular',
   },
 
 })

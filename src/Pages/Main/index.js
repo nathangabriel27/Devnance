@@ -3,40 +3,64 @@ import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform
 import { MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TabView, SceneMap } from 'react-native-tab-view';
-import { StatusBar } from 'expo-status-bar';
-import axios from 'axios';
-
-import { data } from '../../Constants/data'
-
+import { StatusBar } from 'expo-status-bar'
+//Componentes
 import { api } from '../../Services/Api';
 import Loading from '../../Components/Loading'
 import Card from '../../Components/Card'
 import styles from './styles';
-import { colors, sizes } from '../../Constants/theme';
-
+import { colors } from '../../Constants/theme';
+import { data } from '../../Constants/data'
+//Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../Redux/actions/userData';
 
 export default function Main() {
   const navigation = useNavigation()
-  const [loadingVisible, setLoadingVisible] = useState(false)
-  const userState = useSelector(state => state.data)
   const dispatch = useDispatch()
+  const userState = useSelector(state => state.data)
+  const [loadingVisible, setLoadingVisible] = useState(false)
   const [enterprices, setEnterprices] = useState([])
 
-
   useEffect(() => {
-    console.log(userState[0].auth);
-    enterpriceIndex()
-  }, [])
+    (async () => {
+      try {
+        setLoadingVisible(true)
+        const requestAPI = await api.get(`api/v1/enterprises`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'access-token': userState[0].auth.accessToken,
+            'client': userState[0].auth.client,
+            'uid': userState[0].auth.uid,
+          }
+        })
+        if (requestAPI.status === 200) {
+          setEnterprices(requestAPI.data.enterprises)
+          //console.log('enterpriceIndex', requestAPI.data.enterprises)
+          setLoadingVisible(false)
+  
+        }
+      }
+      catch (err) {
+        console.log(err);
+        const message =
+          err.response && err.response.data
+            ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
+            : ` Não foi possivel enviar dados para a API. \nErro code: [ ${err} ]`;
+        Alert.alert('Ooopsss', message);
+        setLoadingVisible(false)
+      }
+    })();
+  }, []);
+
   function confirmedExit() {
     Alert.alert(
       'Sair ',
       'Tem certeza que vai nos deixar? ',
       [
-        { text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        { text: 'Não', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
         {
-          text: 'Sair', onPress: () => logout()
+          text: 'Tenho certeza', onPress: () => logout()
         },
       ],
       { cancelable: false }
@@ -50,34 +74,8 @@ export default function Main() {
     })
   }
 
-  async function enterpriceIndex() {
-    try {
-      setLoadingVisible(true)
-      const requestAPI = await api.get(`api/v1/enterprises`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'access-token': userState[0].auth.accessToken,
-          'client': userState[0].auth.client,
-          'uid': userState[0].auth.uid,
-        }
-      })
-      if (requestAPI.status === 200) {
-        setEnterprices(requestAPI.data.enterprises)
-        //console.log('enterpriceIndex', requestAPI.data.enterprises)
-        setLoadingVisible(false)
 
-      }
-    }
-    catch (err) {
-      console.log(err);
-      const message =
-        err.response && err.response.data
-          ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
-          : ` Não foi possivel enviar dados para a API. \nErro code: [ ${err} ]`;
-      Alert.alert('Ooopsss', message);
-      setLoadingVisible(false)
-    }
-  }
+
   const EnterpricesRoute = () => (
     <View style={styles.tabContainer} >
       <View style={styles.tabHeader} >
@@ -195,8 +193,8 @@ export default function Main() {
       </View>
     );
   };
-  return (
 
+  return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={{ flex: 1 }}
@@ -244,7 +242,6 @@ export default function Main() {
             />
           </View>
         </View>
-
       </View>
     </KeyboardAvoidingView>
 
