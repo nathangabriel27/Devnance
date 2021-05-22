@@ -97,22 +97,54 @@ export default function Main() {
         />
       </View>
       <View style={styles.tabBody} >
-
+        <ScrollView style={styles.tabBodyScroll} >
+          {data.map((data, i) => (
+            <Card
+              id={data.id}
+              enterprise_name={data.enterprise_name}
+              photo={data.photo}
+              description={data.description}
+              city={data.city}
+              country={data.country}
+              share_price={data.share_price}
+            />
+          ))}
+        </ScrollView >
 
       </View>
     </View>
   );
   const FindEnterpriceRoute = () => (
     <View style={styles.tabContainer} >
-
-      <View style={styles.tabBody} >
-        <ScrollView style={styles.tabBodyScroll}>
-          {data.map((data, i) => (
-            <Text key={data.id} style={styles.mainButtonItemTextPar}>{data.enterprise_name}</Text>
-          ))}
-        </ScrollView >
-
+      <View style={styles.tabHeader} >
+        <TextInput
+          style={styles.tabHeaderTextInput}
+          autoCorrect={false}
+          placeholder="Pesquise por uma empresa"
+          placeholderTextColor='#aaa'
+          autoCapitalize="none"
+          keyboardType="email-address"
+          returnKeyType={'search'}
+        //value={email}
+        //onChangeText={(text) => setEmail(text)}
+        //onSubmitEditing={() => passwordInputRef.current.focus()}
+        />
       </View>
+      <View style={styles.tabHeader} >
+        <TextInput
+          style={styles.tabHeaderTextInput}
+          autoCorrect={false}
+          placeholder="Pesquise por uma empresa"
+          placeholderTextColor='#aaa'
+          autoCapitalize="none"
+          keyboardType="email-address"
+          returnKeyType={'search'}
+        //value={email}
+        //onChangeText={(text) => setEmail(text)}
+        //onSubmitEditing={() => passwordInputRef.current.focus()}
+        />
+      </View>
+
     </View>
   );
 
@@ -145,10 +177,7 @@ export default function Main() {
     );
   };
   return (
-    <TouchableWithoutFeedback
-      onPress={Keyboard.dismiss}
-      enabled={Platform.OS === 'ios'}
-    >
+
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : null}
         style={{ flex: 1 }}
@@ -183,29 +212,19 @@ export default function Main() {
           </View>
 
           <View style={styles.main}>
-            <View style={styles.mainView}>
-              <View style={styles.tabItem}>
-                <Text style={styles.tabItemtextSelected} >Empresas</Text>
-              </View>
-            </View>
-            <View style={styles.mainBotton}>
+            <View style={styles.mainView} />
+            <View style={styles.mainBotton} />
 
-              <ScrollView style={styles.tabBodyScroll}>
-                {data.map((data, i) => (
-                  <Card
-                    key={i}
-                    id={data.id}
-                    enterprise_name={data.enterprise_name}
-                    photo={data.photo}
-                    description={data.description}
-                    city={data.city}
-                    country={data.country}
-                    share_price={data.share_price}
-                  />
-                ))}
-              </ScrollView >
+            <View style={styles.mainTabs}>
+              <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={initialLayout}
+                renderTabBar={_renderTabBar}
+                //swipeEnabled={false}
+              />
             </View>
-
 
           </View>
 
@@ -213,6 +232,6 @@ export default function Main() {
         </View>
 
       </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+
   );
 }

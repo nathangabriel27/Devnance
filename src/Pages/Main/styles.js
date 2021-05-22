@@ -102,20 +102,19 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
   mainTabs: {
-    //position: 'absolute',
-    zIndex: 5,
+    position: 'absolute',
     height: '100%',
     width: '100%',
-    marginTop: 30,
+    //marginTop: 30,
     padding: sizes.small,
-    backgroundColor: colors.white,
+    //backgroundColor: colors.white,
 
 
 
   },
   mainBotton: {
     flex: 1,
-    backgroundColor: colors.red,
+    backgroundColor: colors.white,
   },
 
   tabBar: {
@@ -153,7 +152,7 @@ export default StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-   // backgroundColor: colors.gray
+    // backgroundColor: colors.gray
   },
   tabHeader: {
     width: '90%',
@@ -175,19 +174,22 @@ export default StyleSheet.create({
     elevation: 3,
   },
   tabHeaderTextInput: {
-
     flex: 1,
-    height: 40,
+    height: 30,
     color: colors.white,
     alignItems: "center",
     justifyContent: "center",
     fontSize: sizes.title,
     fontFamily: 'Montserrat-Regular',
   },
-  
   tabBody: {
-   // backgroundColor: colors.red,
+    //backgroundColor: colors.red,
+    height: '100%',
     marginVertical: sizes.small,
   },
+  tabBodyScroll: {
+    //backgroundColor: colors.red,
+    marginBottom: 100,
+  }
 
 })

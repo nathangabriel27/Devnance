@@ -22,7 +22,7 @@
     "expo-updates": "~0.5.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "~0.63.4",
+    "react-native": "0.63.4",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-pager-view": "5.0.12",
     "react-native-reanimated": "~2.1.0",
@@ -37,7 +37,7 @@
     "redux-thunk": "2.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "~7.9.0"
   },
   "private": true
 }
