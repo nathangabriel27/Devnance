@@ -1,6 +1,7 @@
 
 <h1 align="center">Desafio Ioasys </h1>
-Usando React Native criamos uma aplicação utilizando API disponibilizada 
+<h3 align="center">Usando React Native criamos uma aplicação utilizando API disponibilizada.</h3>
+
 
 
 ## 💻 Desafio  💻
