@@ -15,7 +15,7 @@ Foi utilizado o Adobe XD para desenhar a tela e fazer o modelo.
 
 
 <p align="center">
-<img src="./assets/designer.PNG" alt="Home" width=250 >
+<img src="./assets/designer.PNG" alt="Home" width=400 >
 
 </p>
 
@@ -118,10 +118,12 @@ $ cd Devnance
 $ sudo expo start
 ```
 
+- Apos a aplicação executar basta abrir o app da expo e escanear o QR code que a aplicação ira rodar no celular.   
 
-Documentação Expo
+
+Documentação Expo com os passos 
 ```sh
- https://docs.expo.io
+ https://docs.expo.io/get-started/installation/
 
 ```
 
