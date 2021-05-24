@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, ActivityIndicator, Image, Text, View, TouchableOpacity } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
-import { colors, sizes } from '../../Constants/theme';
+import React from 'react';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
+import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
+import { colors } from '../../Constants/theme';
 import { useNavigation } from '@react-navigation/native';
 
 import styles from './styles';
@@ -15,17 +15,10 @@ export default function Card(props) {
     city,
     country,
     share_price,
-    data,
   } = props
   const navigation = useNavigation()
 
-  /* 
-    useEffect(() => {
-      console.log('loadingVisible', loadingVisible);
-    }, []) */
-
   return (
-
     <TouchableOpacity
       key={id}
       style={styles.container}
@@ -52,7 +45,6 @@ export default function Card(props) {
           </View>
         </View>
       </View>
-
     </TouchableOpacity>
 
   );

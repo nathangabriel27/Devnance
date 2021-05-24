@@ -11,14 +11,12 @@ export default StyleSheet.create({
   header: {
     height: '15%',
     width: '100%',
-
     alignItems: 'center',
     backgroundColor: colors.gray,
     borderBottomRightRadius: 1000,
     flexDirection: 'row',
   },
   headerProfile: {
-    //backgroundColor: colors.red,
     width: '80%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -34,13 +32,12 @@ export default StyleSheet.create({
   },
   headerCircleText: {
     fontSize: sizes.title,
-    color: colors.black,
+    color: colors.gray,
     fontFamily: 'Montserrat-Bold',
   },
   headerTitle: {
     flex: 1,
     marginRight: sizes.small,
-
   },
   headerText: {
     fontSize: sizes.title,
@@ -48,8 +45,6 @@ export default StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
   },
   headerSubtext: {
-
-
     fontSize: sizes.subTitle,
     color: colors.white,
     fontFamily: 'Montserrat-Regular',
@@ -86,12 +81,10 @@ export default StyleSheet.create({
   },
 
 
-
   main: {
     height: '85%',
     width: '100%',
     backgroundColor: colors.gray,
-
   },
   mainView: {
     height: '15%',
@@ -105,12 +98,7 @@ export default StyleSheet.create({
     position: 'absolute',
     height: '100%',
     width: '100%',
-    //marginTop: 30,
     padding: sizes.small,
-    //backgroundColor: colors.white,
-
-
-
   },
   mainBotton: {
     flex: 1,
@@ -125,9 +113,6 @@ export default StyleSheet.create({
     width: '50%',
     alignItems: 'center',
     paddingVertical: sizes.medium,
-    //backgroundColor: colors.red,
-    //borderBottomWidth: 2,
-    //borderColor: colors.white,
   },
 
   tabItemtextSelected: {
@@ -152,7 +137,6 @@ export default StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    // backgroundColor: colors.gray
   },
   tabHeader: {
     width: '90%',
@@ -230,14 +214,12 @@ export default StyleSheet.create({
     shadowRadius: 2.22,
 
     elevation: 3,
-
   },
   tabBodyScroll: {
     marginBottom: 80,
   },
 
   tabBodyScrollContainer: {
-    //backgroundColor: colors.red,
     alignItems: "center",
     justifyContent: "center",
     margin: sizes.small,

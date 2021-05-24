@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { colors, sizes } from '../../Constants/theme';
+import styles from './styles';
 
 export default function Loading(props) {
   const { loadingVisible, textMensage } = props
@@ -22,21 +23,3 @@ export default function Loading(props) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "rgba(0,0,0,0.5)",
-    position: 'absolute',
-    zIndex: 1,
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    color: colors.white,
-    margin: sizes.medium,
-    //fontFamily: 'Nunito-Bold',
-    fontSize: sizes.title
-  }
-});

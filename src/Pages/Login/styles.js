@@ -9,11 +9,12 @@ export default StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    //backgroundColor: colors.white,
   },
   headerTitle: {
     width: '100%',
     padding: sizes.medium,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerText: {
     fontSize: sizes.title,
@@ -24,7 +25,6 @@ export default StyleSheet.create({
     fontSize: sizes.subTitle,
     color: colors.white,
     fontFamily: 'Montserrat-Regular',
-
   },
 
 
@@ -33,8 +33,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     paddingVertical: sizes.medium,
-    //backgroundColor: colors.white,
-
   },
   mainInput: {
     width: '90%',
@@ -47,7 +45,6 @@ export default StyleSheet.create({
   },
   mainInputItem: {
     flex: 1,
-   
     flexDirection: 'row',
     alignItems: "center",
   },
@@ -72,7 +69,6 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: sizes.title,
     fontFamily: 'Montserrat-Bold',
-
   },
 
 })

@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, View, TouchableOpacityBase } from 'react-native';
-import { MaterialCommunityIcons, Ionicons, FontAwesome } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, View } from 'react-native';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import { StatusBar } from 'expo-status-bar'
@@ -12,7 +12,7 @@ import styles from './styles';
 import { colors } from '../../Constants/theme';
 //Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../Redux/actions/userData';
+import { REMOVE_USER_DATA } from '../../Redux/actions/userData';
 
 export default function Main() {
   const navigation = useNavigation()
@@ -23,6 +23,7 @@ export default function Main() {
   const [dataFind, setDataFind] = useState([])
   const [enterprise_types, setEnterprise_types] = useState('')
   const [name, setName] = useState('')
+  const initials = userState[0].investor.investor.investor_name[0] + userState[0].investor.investor.investor_name[userState[0].investor.investor.investor_name.indexOf(' ') + 1]
   const [scroolContainerText, setScroolContainerText] = useState('Pesquise usando nome e tipo da empresa que deseja encontrar. *O campo tipo é obrigatorio.\n\nExemplo:\n   \nNome = Veuno Ltd \nTipo = 2 \n\nCaso informe apenas tipo será exibido mais de uma empresa se tiver, se passar nome e tipo possivelmente retorná apenas um dado.')
 
   useEffect(() => {
@@ -39,13 +40,11 @@ export default function Main() {
         })
         if (requestAPI.status === 200) {
           setEnterprices(requestAPI.data.enterprises)
-          //console.log('enterpriceIndex', requestAPI.data.enterprises)
           setLoadingVisible(false)
 
         }
       }
       catch (err) {
-        console.log('Erro', err.response.status);
         if (err.response.status === 401) {
           Alert.alert(
             'Ooopppsss ',
@@ -85,7 +84,6 @@ export default function Main() {
       setDataFind(requestAPI.data.enterprises)
     }
     catch (err) {
-      console.log('Erro', err.response.data);
       const message =
         err.response && err.response.data
           ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
@@ -116,9 +114,6 @@ export default function Main() {
         payload: userState[0]
       })
   }
-
-
-
   const EnterpricesRoute = () => (
     <View style={styles.tabContainer} >
       <View style={styles.tabBody} >
@@ -181,8 +176,6 @@ export default function Main() {
 
         </TouchableOpacity>
       </View>
-
-
       {dataFind.length == 0
         ?
         <>
@@ -224,13 +217,8 @@ export default function Main() {
               />
             ))}
           </ScrollView >
-
         </View>
-
-
       }
-
-
     </View>
   );
 
@@ -253,8 +241,8 @@ export default function Main() {
               key={i}
               activeOpacity={0.9}
               style={styles.tabItem}
-              onPress={() => setIndex(i)}>
-
+              onPress={() => setIndex(i)}
+            >
               <Text style={index === i ? styles.tabItemtextSelected : styles.tabItemtext} numberOfLines={1}>{route.title}</Text>
             </TouchableOpacity>
           );
@@ -268,14 +256,13 @@ export default function Main() {
       <StatusBar barStyle="ligh-content" hidden={true} color={colors.gray} />
       <Loading loadingVisible={loadingVisible} textMensage={'Buscando dados'} />
       <View style={styles.container}>
-
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.headerProfile}
             onPress={() => { }}
           >
             <View style={styles.headerCircle}>
-              <Text style={styles.headerCircleText}>TA</Text>
+              <Text style={styles.headerCircleText}>{initials}</Text>
             </View>
             <View style={styles.headerTitle}>
               <Text numberOfLines={1} style={styles.headerText}>{userState[0].investor.investor.investor_name}</Text>
@@ -304,7 +291,8 @@ export default function Main() {
               onIndexChange={setIndex}
               initialLayout={initialLayout}
               renderTabBar={_renderTabBar}
-            //swipeEnabled={false}
+              //swipeEnabled={false}
+              keyboardDismissMode="none"
             />
           </View>
         </View>

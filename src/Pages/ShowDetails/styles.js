@@ -24,6 +24,8 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+
+
   main: {
     flex: 1,
     backgroundColor: colors.white,
@@ -32,9 +34,7 @@ export default StyleSheet.create({
     borderTopRightRadius: 40,
   },
   mainContainer: {
-
     width: '100%',
-
   },
   mainContainerPhoto: {
     marginTop: -40,
@@ -48,7 +48,6 @@ export default StyleSheet.create({
     borderRadius: 1000,
     borderWidth: 2,
     borderColor: colors.white,
-
   },
   mainContainerDetails: {
     alignItems: "center",
@@ -80,7 +79,6 @@ export default StyleSheet.create({
     height: 40,
   },
   mainDescription: {
-
     marginBottom: 280,
     paddingHorizontal: sizes.medium,
   },
@@ -102,14 +100,12 @@ export default StyleSheet.create({
     width: '40%',
     alignItems: "center",
     justifyContent: "center",
-
   },
   mainLocationIcon: {
     //backgroundColor: colors.blue,
     flexDirection: 'row',
     alignItems: "center",
     justifyContent: "center",
-
   },
   mainLocationText: {
     padding: sizes.small,
@@ -138,7 +134,6 @@ export default StyleSheet.create({
     height: 60,
     alignItems: "center",
     flexDirection: 'row',
-
   },
   mainBodyPricingTitle: {
     fontSize: sizes.subTitle,

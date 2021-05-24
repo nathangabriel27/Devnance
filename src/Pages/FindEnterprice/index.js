@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, View, TouchableOpacityBase } from 'react-native';
-import { MaterialIcons, Ionicons, FontAwesome } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { Alert, Image, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { TabView, SceneMap } from 'react-native-tab-view';
-import { StatusBar } from 'expo-status-bar'
 
 //Componentes
 import { api } from '../../Services/Api';
@@ -12,8 +10,8 @@ import Card from '../../Components/Card'
 import styles from './styles';
 import { colors } from '../../Constants/theme';
 //Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../Redux/actions/userData';
+import { useSelector } from 'react-redux';
+
 
 export default function FindEnterprice() {
   const navigation = useNavigation()
@@ -25,7 +23,7 @@ export default function FindEnterprice() {
   const [enterprices, setEnterprices] = useState([])
   const [scroolContainerText, setScroolContainerText] = useState('Pesquise usando nome e tipo da empresa que deseja encontrar. *O campo tipo é obrigatorio.\n\nExemplo:\n   \nNome = Veuno Ltd \nTipo = 2 \n\nCaso informe apenas tipo será exibido mais de uma empresa se tiver, se passar nome e tipo possivelmente retorná apenas um dado.')
 
-  async function enterpriceIndexWithFilter(props) {
+  async function enterpriceIndexWithFilter() {
     Keyboard.dismiss
     try {
       setLoadingVisible(true)
@@ -46,8 +44,7 @@ export default function FindEnterprice() {
       setDataFind(requestAPI.data.enterprises)
     }
     catch (err) {
-      console.log('Erro', err.response.data);
-      const message =
+            const message =
         err.response && err.response.data
           ? ` Não foi possivel enviar dados para a API. Verique sua conexão. \nErro code: [ ${err} ]`
           : ` Não foi possivel enviar dados para a API. \nErro code: [ ${err} ]`;
@@ -55,7 +52,6 @@ export default function FindEnterprice() {
       setLoadingVisible(false)
     }
   }
-
 
   return (
     <TouchableWithoutFeedback
@@ -90,7 +86,6 @@ export default function FindEnterprice() {
                 value={name}
                 onChangeText={(text) => setName(text)}
                 onSubmitEditing={() => enterpriceIndexWithFilter()}
-
               />
             </View>
             <View style={styles.tabHeaderContainer}>
@@ -113,11 +108,8 @@ export default function FindEnterprice() {
                 onPress={() => enterpriceIndexWithFilter()}
               >
                 <Ionicons name="search-circle-sharp" size={40} color={colors.gray} />
-
               </TouchableOpacity>
             </View>
-
-
             {dataFind.length == 0
               ?
               <View style={styles.tabBodyScrollContainer}>
@@ -151,11 +143,7 @@ export default function FindEnterprice() {
                   ))}
                 </ScrollView >
               </View>
-
-
             }
-
-
           </View>
         </View>
       </KeyboardAvoidingView>

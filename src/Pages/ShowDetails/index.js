@@ -1,23 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Alert, Image, Linking, Keyboard, KeyboardAvoidingView, Platform, Text, Share, ScrollView, Dimensions, TouchableOpacity, TouchableWithoutFeedback, View, TouchableOpacityBase } from 'react-native';
-import { MaterialCommunityIcons, MaterialIcons, FontAwesome, Entypo } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Linking, Text, Share, ScrollView, TouchableOpacity, View } from 'react-native';
+import { MaterialCommunityIcons, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { TabView, SceneMap } from 'react-native-tab-view';
 import { StatusBar } from 'expo-status-bar';
 import * as MailComposer from 'expo-mail-composer'
 
-import { data } from '../../Constants/data'
+
 import iconBase64 from '../../Constants/iconBase64'
-
-
 import { api } from '../../Services/Api';
 import Loading from '../../Components/Loading'
-import Card from '../../Components/Card'
 import styles from './styles';
-import { colors, sizes } from '../../Constants/theme';
-
-import { useSelector, useDispatch } from 'react-redux';
-import { SAVE_USER_DATA } from '../../Redux/actions/userData';
+import { colors } from '../../Constants/theme';
+import { useSelector } from 'react-redux';
 
 export default function ShowDetails() {
   const navigation = useNavigation()
@@ -25,9 +19,6 @@ export default function ShowDetails() {
   const [loadingVisible, setLoadingVisible] = useState(false)
   const [data, setData] = useState(false)
   const userState = useSelector(state => state.data)
-
-  const [numberOfLines, setNumberOfLines] = useState(0)
-
   function openMail(props) {
     MailComposer.composeAsync({
       subject: `Ola estou entrando em contato via email`,
@@ -40,10 +31,6 @@ export default function ShowDetails() {
   function openNumberPhone(props) {
     Linking.openURL(props ? `tel:${props}` : `tel:31994827158`)
   }
-  /*   useEffect(() => {
-      return loadShowDetailsId(route.params);
-    }, [])
-   */
 
   const onShare = async () => {
     const result = await Share.share({
@@ -51,12 +38,12 @@ export default function ShowDetails() {
     });
     if (result.action === Share.sharedAction) {
       if (result.activityType) {
-        console.log('result.activityType: ', result.activityType);
+        //console.log('result.activityType: ', result.activityType);
       } else {
         // shared
       }
     } else if (result.action === Share.dismissedAction) {
-      console.log('result.action: ', result.action);
+      //console.log('result.action: ', result.action);
     }
   };
   useEffect(() => {
@@ -71,7 +58,7 @@ export default function ShowDetails() {
             'uid': userState[0].auth.uid,
           },
         })
-        console.log('request DATA', requestAPI.data)
+
         if (requestAPI.data.success === true) {
           setData(requestAPI.data)
           setLoadingVisible(false)
@@ -94,7 +81,6 @@ export default function ShowDetails() {
 
 
   return (
-
     <>
       {data === false
         ?
@@ -129,9 +115,6 @@ export default function ShowDetails() {
                   <Text style={styles.mainContainerTitle}>{data.enterprise.enterprise_name}</Text>
                   <Text style={styles.mainContainerSubtitle}>{`# ${data.enterprise.id}`}</Text>
                 </View>
-
-
-
                 <View style={styles.mainSocial}>
                   <TouchableOpacity
                     style={styles.mainSocialButton}
@@ -204,12 +187,7 @@ export default function ShowDetails() {
                       </View>
                     </View>
                   </View>
-
-
-
                   <View style={styles.mainBodyPricing}>
-
-
                     <View style={styles.mainBodyPricingContainer}>
                       <View style={styles.mainBodyPricingText}>
                         <Text style={styles.mainBodyPricingTitle}>Nº de ações </Text>
@@ -235,12 +213,9 @@ export default function ShowDetails() {
                     <Text style={styles.mainDescriptionText}>{data.enterprise.description}</Text>
                   </View>
                 </ScrollView>
-
-
               </View>
             </View>
           </View>
-
         </>
       }
     </>

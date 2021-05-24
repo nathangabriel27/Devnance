@@ -3,12 +3,10 @@ import { FontAwesome, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 //import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
-import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, SafeAreaView, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Alert, Image, ImageBackground, Keyboard, KeyboardAvoidingView, Platform, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { api } from '../../Services/Api';
 import Loading from '../../Components/Loading'
 import styles from './styles';
-
-
 
 import { useSelector, useDispatch } from 'react-redux';
 import { SAVE_USER_DATA, REMOVE_USER_DATA } from '../../Redux/actions/userData';
@@ -26,8 +24,6 @@ export default function Login() {
 
   useEffect(() => {
     setLoadingVisible(false)
-    console.log(userState.length);
-    console.log('route', route.params);
 
     if (userState.length === 0) {
       return
@@ -40,11 +36,9 @@ export default function Login() {
       Se a api trafegasse a senha cryptografada ou um UID de token, nesse momento eu faria login 
       novamente com usuario e senha salvos no storage ou passaria o token com permissão de acesso do usuario.
       
-      Irei fazer de uma forma que não é segura, salvando o usuario e senha digitado pelo usuario localm
+      Irei fazer de uma forma que não é segura, salvando o usuario e senha digitado pelo usuario localmente
       (OBS* Não faço isso nos apps que desenvolvo, irei fazer dessa vez para ter uma melhor experiencia para avaliação.)
        */
-      //console.log('userState[0]', userState);
-      //return accessToken(userState[0].auth)
     }
   }, [])
 
@@ -58,7 +52,6 @@ export default function Login() {
   async function singIn(props) {
     Keyboard.dismiss
     try {
-      console.log('props sing', email);
       setLoadingVisible(true)
       const requestAPI = await api.post(`api/v1/users/auth/sign_in`, {
         headers: {
@@ -67,8 +60,6 @@ export default function Login() {
         email: props.email,
         password: props.password,
       })
-
-      //console.log('request HEADERS', requestAPI.headers["access-token"])
       if (requestAPI.status === 200) {
         dispatch({
           type: REMOVE_USER_DATA,
@@ -91,18 +82,15 @@ export default function Login() {
         }),
           setLoadingVisible(false),
           navigation.navigate('Main')
-        //console.log('response', userState);
-
       }
     }
     catch (err) {
-      console.log('err singIn', err.response.data.errors[0]);
+      
       if (err.response.data.errors[0] === "Invalid login credentials. Please try again.") {
         return Alert.alert(
           'Ooopppsss ',
           'Parece que sua sessão acabou expirando, Vamos ter que fazer o login novamente para atualizar suas credenciais.',
           [
-
             {
               text: 'Ok, fazer login novamente', onPress: () => logout()
             },
@@ -118,7 +106,6 @@ export default function Login() {
       setLoadingVisible(false)
     }
   }
-
   function logout() {
     navigation.navigate('Login')
     setLoadingVisible(false)
@@ -157,9 +144,6 @@ export default function Login() {
                 <Text style={styles.headerSubtext}>Faça login para continuar...</Text>
               </View>
             </View>
-
-
-
             <View style={styles.main}>
               <View style={styles.mainInput}>
                 <FontAwesome5 name="user-circle" size={28} color="#FFFFFF" style={{ marginHorizontal: 10 }} />
@@ -198,12 +182,10 @@ export default function Login() {
                 </View>
                 <TouchableOpacity
                   style={{ marginHorizontal: 5 }}
-                  //  onPress={() => logout()}
                   onPress={() => visibleSecureText()}
                 >
                   <FontAwesome name={!secureText ? "eye" : "eye-slash"} size={26} color={!secureText ? "#05AB4B" : "#aaa"} />
                 </TouchableOpacity>
-
               </View>
               <TouchableOpacity
                 style={styles.mainButton}
