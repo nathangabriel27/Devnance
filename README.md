@@ -1,6 +1,6 @@
 
 <h1 align="center">Desafio Ioasys </h1>
-<h3 align="center">Usando React Native criamos uma aplicação utilizando API disponibilizada.</h3>
+<h3 align="center">Codando com React Native criamos uma aplicação utilizando API disponibilizada.</h3>
 
 
 
@@ -38,7 +38,7 @@ Foi utilizado o Adobe XD para desenhar a tela e fazer o modelo.
 ##  📚 Bibliotecas 📚
 
 - Expo
-Não foi detalhado se era para usar ou CLI ou Expo, porem ultilizei o Bare Workflow que permite que eu execute o codigo nativo e ainda me permite acesso aos recursos do Expo. 
+Não foi detalhado se era para usar ou CLI ou Expo, porem utilizei o Bare Workflow que permite que eu execute o codigo nativo e ainda me permite acesso aos recursos do Expo. 
 
 link explicativo.
 ```sh
