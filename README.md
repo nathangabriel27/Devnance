@@ -116,6 +116,9 @@ $ git clone https://github.com/nathangabriel27/Devnance
 $ cd Devnance 
 ```
 ```sh
+$ yarn or npm install
+```
+```sh
 $ sudo expo start
 ```
 
