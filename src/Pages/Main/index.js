@@ -260,6 +260,7 @@ export default function Main() {
           <TouchableOpacity
             style={styles.headerProfile}
             onPress={() => { }}
+            disabled
           >
             <View style={styles.headerCircle}>
               <Text style={styles.headerCircleText}>{initials}</Text>
